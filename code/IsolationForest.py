@@ -1,4 +1,5 @@
 import numpy as np
+from joblib import dump, load
 
 class Node:
     __slots__ = ['depth', 'size', 'is_leaf', 'feature', 'threshold', 'left', 'right']
@@ -141,3 +142,10 @@ class IsolationForest:
         if n <= 1:
             return 1.0
         return 2.0 * (np.log(n - 1) + 0.5772156649) - 2.0 * (n - 1) / n
+
+    def save(self, filepath):
+        dump(self, filepath)
+
+    @staticmethod
+    def load(filepath):
+        return load(filepath)
