@@ -114,7 +114,7 @@ class IsolationForest:
             self.trees.append(tree)
 
         scores = self.decision_function(X)
-        self.threshold = np.quantile(scores, 1 - self.contamination)
+        self.threshold = np.quantile(scores,self.contamination)
         
         return self
     
@@ -130,11 +130,11 @@ class IsolationForest:
         avg_path_length = np.mean(path_lengths, axis=0)
         
         c = self._c(self.max_samples)
-        return 2.0 ** (-avg_path_length / c)
+        return (0.5 - 2.0 ** (-avg_path_length / c))
     
     def predict(self, X):
         scores = self.decision_function(X)
-        return np.where(scores >= self.threshold, 1, -1)
+        return np.where(scores < self.threshold, -1, 1)
     
     @staticmethod
     def _c(n):
